@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caesar-Verfahren | Informatikunterricht</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="caesar-verfahren.js" defer></script>
+</head>
+<body>
+  <header class="top"><nav class="wrap" aria-label="Brotkrumennavigation"><ol><li><a href="../../index.html">Startseite</a></li><li><a href="../index.html">Jahrgang 9</a></li><li><a href="index.html">Kryptologie</a></li><li><a href="caesar-verfahren.html" aria-current="page">Caesar-Verfahren</a></li></ol></nav></header>
+  <main class="wrap">
+    <div class="intro"><h1>Caesar-Verfahren</h1><p>Wie wird aus HALLO der Geheimtext KDOOR? Verschiebe das Alphabet und finde es heraus.</p></div>
+    
+    <nav class="sections" aria-label="Auf dieser Seite">
+      <a href="#prinzip">So funktioniert es</a>
+      <a href="#werkzeug">Caesar-Werkzeug</a>
+      <a href="#aufgaben">Aufgaben</a>
+    </nav>
+    <section class="card" id="prinzip">
+      <h2>So funktioniert es</h2>
+      <p>Beim Caesar-Verfahren ersetzt du jeden Buchstaben des <strong>Klartexts</strong> durch einen Buchstaben, der im Alphabet eine feste Anzahl von Stellen weiter rechts steht. Diese Anzahl ist der <strong>Schlüssel</strong>. Nach Z zählst du bei A weiter.</p>
+      <p>Mit Schlüssel 3 wird aus A ein D, aus H ein K und aus Z ein C.</p>
+      <div class="example"><code>H A L L O</code><span>↓</span><code>K D O O R</code></div>
+      <p>Das Ergebnis heißt <strong>Geheimtext</strong>. Zum Entschlüsseln gehst du um dieselbe Anzahl Stellen nach links. So wird aus K wieder H.</p>
+      <p>Für unsere Beispiele und Aufgaben verwenden wir A bis Z. Leerzeichen, Satzzeichen, Ziffern und Zeichen wie Ä oder ß bleiben im Werkzeug unverändert.</p>
+    </section>
+    <section class="card" id="werkzeug">
+      <h2>Caesar-Werkzeug</h2>
+      <p>Schreibe einen Text in das passende Feld und wähle einen Schlüssel. „Verschlüsseln“ füllt das Geheimtextfeld, „Entschlüsseln“ das Klartextfeld.</p>
+      <noscript><p>Aktiviere JavaScript, um das Werkzeug und die Antwortprüfung zu nutzen.</p></noscript>
+      <div class="controls">
+        <label for="schluessel">Schlüssel (0–25)<input id="schluessel" type="number" min="0" max="25" step="1" value="3" required></label>
+      </div>
+      <p id="key-error" role="status" hidden>Gib eine ganze Zahl von 0 bis 25 ein.</p>
+      <div class="caesar-felder">
+        <div>
+          <label for="klartext">Klartext</label>
+          <textarea id="klartext" rows="4">HALLO</textarea>
+          <button id="verschluesseln" type="button">Verschlüsseln</button>
+        </div>
+        <div>
+          <label for="geheimtext">Geheimtext</label>
+          <textarea id="geheimtext" rows="4">KDOOR</textarea>
+          <button id="entschluesseln" type="button">Entschlüsseln</button>
+        </div>
+      </div>
+      <details open>
+        <summary>Alphabet-Zuordnung</summary>
+        <dl class="alphabet">
+          <dt>Klartext</dt><dd><code>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</code></dd>
+          <dt>Geheimtext</dt><dd><code id="alphabet-ausgabe">D E F G H I J K L M N O P Q R S T U V W X Y Z A B C</code></dd>
+        </dl>
+      </details>
+    </section>
+    <section id="aufgaben">
+      <h2>Aufgaben</h2>
+      <p>Probiere es zuerst von Hand. Mit dem Werkzeug kannst du anschließend deinen Lösungsweg nachvollziehen.</p>
+      <div class="practice">
+        <form class="card exercise" data-check="encrypt">
+          <h3>Verschlüsseln</h3>
+          <p>Verschlüssele <code>ZEBRA</code> mit Schlüssel 3.</p>
+          <label for="antwort-1">Geheimtext</label>
+          <div class="answer"><input id="antwort-1" type="text" required autocomplete="off" spellcheck="false"><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Gehe bei Z drei Schritte weiter. Z → A ist der erste Schritt.</p></details>
+        </form>
+        <form class="card exercise" data-check="decrypt">
+          <h3>Entschlüsseln</h3>
+          <p>Entschlüssele <code>NSKTWRFYNP</code> mit Schlüssel 5.</p>
+          <label for="antwort-2">Klartext</label>
+          <div class="answer"><input id="antwort-2" type="text" required autocomplete="off" spellcheck="false"><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Gehe von N fünf Schritte nach links. Du landest bei I.</p></details>
+        </form>
+        <form class="card exercise" data-check="crack">
+          <h3>Geheimtext knacken</h3>
+          <p><code>NLOLPT</code> wurde mit einem unbekannten Schlüssel verschlüsselt. Finde Schlüssel und Klartext.</p>
+          <div class="text-grid">
+            <label for="antwort-3">Schlüssel (1–25)<input id="antwort-3" type="number" min="1" max="25" step="1" required></label>
+            <label for="antwort-4">Klartext<input id="antwort-4" type="text" required autocomplete="off" spellcheck="false"></label>
+          </div>
+          <button>Prüfen</button>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Trage den Geheimtext im Werkzeug ein. Probiere die Schlüssel der Reihe nach und klicke jeweils auf „Entschlüsseln“, bis du ein deutsches Wort erkennst.</p></details>
+        </form>
+        <form class="card exercise" data-check="count">
+          <h3>Sicherheit beurteilen</h3>
+          <p>Schlüssel 0 lässt den Text unverändert. Wie viele andere Schlüssel musst du im schlimmsten Fall ausprobieren, um alle möglichen Verschiebungen zu testen?</p>
+          <label for="antwort-5">Anzahl der Schlüssel</label>
+          <div class="answer"><input id="antwort-5" type="number" min="0" step="1" required><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Nach 26 Schritten stehst du wieder beim ursprünglichen Buchstaben.</p></details>
+        </form>
+      </div>
+    </section>
+    <section class="card">
+      <h2>Warum Caesar leicht zu knacken ist</h2>
+      <p>Mit 26 Buchstaben gibt es nur 25 Verschiebungen, die den Text verändern. Wer den Schlüssel nicht kennt, kann sie alle ausprobieren. Bei längeren Texten hilft auch die Buchstabenhäufigkeit. Das häufige E wird zum Beispiel in einem Geheimtext mit Schlüssel 3 immer zu H.</p>
+    </section>
+    
+  </main>
+  <footer class="site-footer">
+    <nav class="wrap" aria-label="Rechtliches">
+      <a href="../../impressum/index.html">Impressum</a>
+      <a href="../../datenschutz/index.html">Datenschutz</a>
+    </nav>
+  </footer>
+</body>
+</html>

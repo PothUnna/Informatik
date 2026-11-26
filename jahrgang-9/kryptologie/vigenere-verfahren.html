@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vigenère-Verfahren | Informatikunterricht</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="vigenere-quadrat.js" defer></script>
+  <script src="vigenere-verfahren.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <nav class="wrap" aria-label="Brotkrumennavigation">
+      <ol>
+        <li><a href="../../index.html">Startseite</a></li>
+        <li><a href="../index.html">Jahrgang 9</a></li>
+        <li><a href="index.html">Kryptologie</a></li>
+        <li><a href="vigenere-verfahren.html" aria-current="page">Vigenère-Verfahren</a></li>
+      </ol>
+    </nav>
+  </header>
+  <main class="wrap">
+    <div class="intro">
+      <h1>Vigenère-Verfahren</h1>
+      <p>Wie kann derselbe Buchstabe in einer Nachricht unterschiedlich verschlüsselt werden?</p>
+    </div>
+    <nav class="sections" aria-label="Auf dieser Seite">
+      <a href="#prinzip">So funktioniert es</a>
+      <a href="#quadrat">Vigenère-Quadrat</a>
+      <a href="#werkzeug">Werkzeug</a>
+      <a href="#aufgaben">Aufgaben</a>
+    </nav>
+    <noscript><p>Aktiviere JavaScript für das Quadrat, das Werkzeug und die Antwortprüfung.</p></noscript>
+    <section class="card" id="prinzip">
+      <h2>So funktioniert es</h2>
+      <p>Beim <a href="caesar-verfahren.html">Caesar-Verfahren</a> gilt eine einzige Verschiebung für den ganzen Text. Beim Vigenère-Verfahren bestimmt ein <strong>Schlüsselwort</strong> die Verschiebung für jeden Buchstaben. A bedeutet 0 Stellen, B bedeutet 1 Stelle und Z bedeutet 25 Stellen. Nach Z geht es bei A weiter.</p>
+      <ol>
+        <li>Schreibe das Schlüsselwort wiederholt unter den Klartext. Überspringe dabei die Leerzeichen. Im Beispiel verwenden wir <code>EVA</code>.</li>
+        <li>Wähle für jeden Buchstaben im Quadrat die Zeile des Schlüsselbuchstabens und die Spalte des Klartextbuchstabens. Am Schnittpunkt steht der Geheimtextbuchstabe.</li>
+        <li>Zum Entschlüsseln suchst du in der Zeile des Schlüsselbuchstabens den Geheimtextbuchstaben. Der Spaltenkopf darüber ist der Klartextbuchstabe.</li>
+      </ol>
+      <div class="quadrat-scroll" tabindex="0" role="region" aria-label="Beispiel mit dem Schlüsselwort EVA">
+        <table class="vigenere-beispiel">
+          <tbody>
+            <tr><th scope="row">Klartext</th><td>M</td><td>O</td><td>R</td><td>G</td><td>E</td><td>N</td><td></td><td>T</td><td>R</td><td>E</td><td>F</td><td>F</td><td>E</td><td>N</td><td></td><td>W</td><td>I</td><td>R</td><td></td><td>U</td><td>N</td><td>S</td></tr>
+            <tr><th scope="row">Schlüssel</th><td>E</td><td>V</td><td>A</td><td>E</td><td>V</td><td>A</td><td></td><td>E</td><td>V</td><td>A</td><td>E</td><td>V</td><td>A</td><td>E</td><td></td><td>V</td><td>A</td><td>E</td><td></td><td>V</td><td>A</td><td>E</td></tr>
+            <tr><th scope="row">Geheimtext</th><td>Q</td><td>J</td><td>R</td><td>K</td><td>Z</td><td>N</td><td></td><td>X</td><td>M</td><td>E</td><td>J</td><td>A</td><td>E</td><td>R</td><td></td><td>R</td><td>I</td><td>V</td><td></td><td>P</td><td>N</td><td>W</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Am Anfang wird M mit E zu Q. Das R in MORGEN steht über A und bleibt daher ein R.</p>
+    </section>
+    <section class="card" id="quadrat">
+      <h2>Interaktives Vigenère-Quadrat</h2>
+      <p>Klicke links auf einen Schlüsselbuchstaben und oben auf einen Klartextbuchstaben. Ihr Schnittpunkt zeigt den Geheimtextbuchstaben. Klickst du direkt in die Tabelle, werden der zugehörige Schlüssel- und Klartextbuchstabe markiert. Zum Entschlüsseln folgst du der bekannten Schlüsselzeile bis zum gesuchten Geheimtextbuchstaben.</p>
+      <div class="quadrat-scroll" tabindex="0" role="region" aria-label="Vigenère-Quadrat, horizontal scrollbar">
+        <table class="vigenere-quadrat" id="vigenere-quadrat" aria-label="Vigenère-Quadrat"></table>
+      </div>
+    </section>
+    <section class="card" id="werkzeug">
+      <h2>Vigenère-Werkzeug</h2>
+      <p>Gib ein Schlüsselwort aus A bis Z ein. Groß- und Kleinschreibung bleibt im Text erhalten. Leerzeichen, Satzzeichen, Ziffern und Umlaute bleiben unverändert und verbrauchen keinen Schlüsselbuchstaben.</p>
+      <form id="vigenere-werkzeug">
+        <label for="schluesselwort">Schlüsselwort</label>
+        <input id="schluesselwort" type="text" value="EVA" required pattern="[A-Za-z]+" autocomplete="off" spellcheck="false">
+        <p id="vigenere-hinweis" role="status"></p>
+        <div class="caesar-felder">
+          <div>
+            <label for="klartext">Klartext</label>
+            <textarea id="klartext" rows="4">MORGEN TREFFEN WIR UNS</textarea>
+            <button type="submit" value="encrypt">Verschlüsseln</button>
+          </div>
+          <div>
+            <label for="geheimtext">Geheimtext</label>
+            <textarea id="geheimtext" rows="4">QJRKZN XMEJAER RIV PNW</textarea>
+            <button type="submit" value="decrypt">Entschlüsseln</button>
+          </div>
+        </div>
+      </form>
+      <div id="vigenere-schritte" hidden>
+        <label for="vigenere-position">Buchstabe im Quadrat ansehen <select id="vigenere-position"></select></label>
+        <a href="#quadrat">Zum Quadrat</a>
+      </div>
+    </section>
+    <section id="aufgaben">
+      <h2>Aufgaben</h2>
+      <div class="practice">
+        <form class="card exercise" data-loesung="B">
+          <h3>Einen Buchstaben nachschlagen</h3>
+          <p>Welcher Geheimtextbuchstabe entsteht aus <code>Z</code> mit Schlüsselbuchstabe <code>C</code>?</p>
+          <label for="antwort-1">Geheimtextbuchstabe</label>
+          <div class="answer"><input type="text" id="antwort-1" required autocomplete="off"><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Suche die Zeile C und gehe zur Spalte Z.</p></details>
+        </form>
+        <form class="card exercise" data-loesung="CBGSBT">
+          <h3>Ein Wort verschlüsseln</h3>
+          <p>Verschlüssele <code>CAESAR</code> mit dem Schlüsselwort <code>ABC</code>.</p>
+          <label for="antwort-2">Geheimtext</label>
+          <div class="answer"><input type="text" id="antwort-2" required autocomplete="off"><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Schreibe <code>ABCABC</code> unter das Wort. Das erste C bleibt bei A ein C.</p></details>
+        </form>
+        <form class="card exercise" data-loesung="GEHEIM">
+          <h3>Ein Wort entschlüsseln</h3>
+          <p>Entschlüssele <code>REUPIZ</code> mit dem Schlüsselwort <code>LAN</code>.</p>
+          <label for="antwort-3">Klartext</label>
+          <div class="answer"><input type="text" id="antwort-3" required autocomplete="off"><button>Prüfen</button></div>
+          <p class="feedback" role="status"></p>
+          <details><summary>Tipp</summary><p>Suche R in der Zeile L und lies den Spaltenkopf ab.</p></details>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <nav class="wrap" aria-label="Rechtliches">
+      <a href="../../impressum/index.html">Impressum</a>
+      <a href="../../datenschutz/index.html">Datenschutz</a>
+    </nav>
+  </footer>
+</body>
+</html>

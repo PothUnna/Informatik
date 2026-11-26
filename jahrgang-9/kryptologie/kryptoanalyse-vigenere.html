@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kryptoanalyse des Vigenère-Verfahrens | Informatikunterricht</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <script src="kasiski-aufgabentexte.js" defer></script>
+  <script src="vigenere-quadrat.js" defer></script>
+  <script src="kryptoanalyse-vigenere.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <nav class="wrap" aria-label="Brotkrumennavigation">
+      <ol>
+        <li><a href="../../index.html">Startseite</a></li>
+        <li><a href="../index.html">Jahrgang 9</a></li>
+        <li><a href="index.html">Kryptologie</a></li>
+        <li><a href="kryptoanalyse-vigenere.html" aria-current="page">Kryptoanalyse Vigenère</a></li>
+      </ol>
+    </nav>
+  </header>
+  <main class="wrap">
+    <div class="intro">
+      <h1>Kryptoanalyse des Vigenère-Verfahrens</h1>
+      <p>Wie lässt sich die Länge eines unbekannten Schlüsselworts aus dem Geheimtext abschätzen?</p>
+    </div>
+    <nav class="sections" aria-label="Auf dieser Seite">
+      <a href="#prinzip">Kasiski-Verfahren</a>
+      <a href="#labor">Interaktive Analyse</a>
+      <a href="#aufgabe">Aufgabe</a>
+      <a href="#danach">Häufigkeitsanalyse</a>
+    </nav>
+    <section class="card" id="prinzip">
+      <h2>Warum wir zuerst die Schlüssellänge suchen</h2>
+      <p>Bei Caesar wird jedes E immer durch denselben Buchstaben ersetzt. Bei <a href="vigenere-verfahren.html">Vigenère</a> kann dasselbe E je nach Stelle im Schlüsselwort unterschiedlich verschlüsselt werden. Die Buchstabenhäufigkeiten des gesamten Geheimtexts vermischen also mehrere Verschiebungen.</p>
+      <h3>Die Idee von Kasiski</h3>
+      <p>Beginnt dieselbe Klartextfolge zweimal an derselben Stelle im Schlüsselzyklus, entsteht dieselbe Geheimtextfolge. Zwischen ihren Startpositionen liegen dann ganze Umläufe des Schlüssels. Bei fünf Buchstaben pro Umlauf passen in einen Abstand von 55 genau elf Umläufe.</p>
+      <ol>
+        <li>Suche wiederholte Buchstabenfolgen im Geheimtext.</li>
+        <li>Ziehe ihre Startpositionen voneinander ab.</li>
+        <li>Suche Zahlen, die mehrere dieser Abstände ohne Rest teilen. Sie kommen als Schlüssellängen infrage.</li>
+      </ol>
+      <p>Wir beginnen mit Dreierfolgen. Längere Folgen kommen seltener vor, sind dafür aber seltener zufällige Treffer. Ein häufiger Teiler kann selbst ein Teiler der wirklichen Schlüssellänge sein.</p>
+    </section>
+    <section class="card" id="labor">
+      <h2>Kasiski-Verfahren ausprobieren</h2>
+      <p>Mit Klartext und Schlüsselwort erzeugst du einen Geheimtext zum Experimentieren. Die Suche nach Wiederholungen und Teilern verwendet anschließend nur diesen Geheimtext. Für die Positionszählung bleiben ausschließlich A bis Z erhalten.</p>
+      <noscript><p>Aktiviere JavaScript, um den Geheimtext zu erzeugen und zu untersuchen.</p></noscript>
+      <form id="kasiski-form">
+        <label for="analyse-klartext">Klartext</label>
+        <textarea id="analyse-klartext" rows="7" required>Hat der alte Hexenmeister,
+Sich doch einmal wegbegeben!
+Und nun sollen seine Geister
+Auch nach meinem Willen leben.
+Seine Wort und Werke
+Merkt ich, und den Brauch,
+Und mit Geistesstärke
+Thu ich Wunder auch.
+
+Walle! walle!
+Manche Strecke,
+Daß zum Zwecke,
+Wasser fließe,
+Und, mit reichem vollem Schwalle,
+Zu dem Bade sich ergieße.
+
+Und nun komm du alter Besen,
+Nimm die schlechten Lumpenhüllen,
+Bist schon lange Knecht gewesen,
+Nun erfülle meinen Willen.
+Auf zwey Beinen stehe,
+Oben sey ein Kopf,
+Eile nun und gehe
+Mit dem Wassertopf.
+
+Walle! walle!
+Manche Strecke,
+Daß, zum Zwecke,
+Wasser fließe,
+Und, mit reichem vollem Schwalle,
+Zu dem Bade sich ergieße.
+
+Seht er läuft zum Ufer nieder,
+Warlich ist schon an dem Flusse,
+Und mit Blitzesschnelle wieder
+Ist er hier mit raschem Gusse.
+Schon zum zweytenmale!
+Wie das Becken schwillt!
+Wie sich jede Schaale
+Voll mit Wasser füllt!
+
+Stehe! Stehe!
+Denn wir haben
+Deiner Gaben
+Vollgemessen! –
+Ach ich merk es, wehe! wehe!
+Hab ich doch das Wort vergessen!
+
+Ach! das Wort, worauf am Ende
+Er das wird was er gewesen.
+Ach er läuft und bringt behende,
+Wärst du doch der alte Besen!
+Immer neue Güsse
+Bringt er schnell herein,
+Ach! und hundert Flüsse
+Stürzen auf mich ein.
+
+Nein nicht länger
+Kann ichs lassen,
+Will ihn fassen.
+Das ist Tücke!
+Ach! nun wird mir immer bänger!
+Welche Mine! welche Blicke!
+
+O! du Ausgeburt der Hölle!
+Soll das ganze Haus ersaufen?
+Seh ich über jede Schwelle
+Doch schon Wasserströme laufen.
+Ein verruchter Besen
+Der nicht hören will!
+Stock! der du gewesen,
+Steh doch wieder still!
+
+Willsts am Ende
+Gar nicht lassen;
+Will dich fassen,
+Will dich halten,
+Und das alte Holz behende
+Mit dem scharfen Beile spalten.
+
+Seht da kommt er schleppend wieder!
+Wie ich mich nun auf dich werfe,
+Gleich, o Kobold! liegst du nieder,
+Krachend trifft die glatte Schärfe.
+Warlich braf getroffen!
+Seht er ist entzwey,
+Und nun kann ich hoffen,
+Und ich athme frey!
+
+Wehe! wehe!
+Beyde Theile
+Stehn, in Eile,
+Schon als Knechte
+Völlig fertig in die Höhe!
+Helft mir ach ihr hohen Mächte!
+
+Und sie laufen! Naß und nässer
+Wirds im Saal und auf den Stufen,
+Welch entsetzliches Gewässer!
+Herr und Meister! hör mich rufen!
+Ach! da kommt der Meister!
+Herr, die Noth ist groß,
+Die ich rief die Geister
+Werd ich nun nicht los.
+
+„In die Ecke,
+Besen! Besen!
+Seyds gewesen.
+Denn als Geister
+Ruft euch nur zu seinem Zwecke,
+Erst hervor der alte Meister.“</textarea>
+        <p>Startbeispiel nach <a href="https://de.wikisource.org/wiki/Der_Zauberlehrling_(1798)">Goethes „Der Zauberlehrling“, Erstdruck von 1798</a>.</p>
+        <label for="analyse-schluessel">Schlüsselwort aus A bis Z</label>
+        <input id="analyse-schluessel" type="text" value="BESEN" pattern="[A-Za-z]+" required autocomplete="off" spellcheck="false">
+        <div class="kasiski-actions"><button>Verschlüsseln und untersuchen</button><button id="analyse-beispiel" type="button">Beispiel laden</button></div>
+      </form>
+      <p id="analyse-status" role="status"></p>
+      <div id="analyse-ergebnisse" class="kasiski-ergebnisse" hidden>
+        <h3>1. Buchstabenfolge auswählen</h3>
+        <p>Wähle zuerst die Länge der gesuchten Folgen und dann eine der Folgen, die im Geheimtext mehrfach vorkommen.</p>
+        <div class="controls">
+          <label for="folgenlaenge">Länge der gesuchten Folge
+            <select id="folgenlaenge">
+              <option value="3" selected>3 Buchstaben</option>
+              <option value="4">4 Buchstaben</option>
+              <option value="5">5 Buchstaben</option>
+              <option value="6">6 Buchstaben</option>
+            </select>
+          </label>
+          <label for="wiederholung">Wiederholte Folge <select id="wiederholung"></select></label>
+        </div>
+        <p id="wiederholung-info" role="status"></p>
+        <h3>2. Abstand zwischen zwei Fundstellen</h3>
+        <p>Jeder Knopf vergleicht zwei aufeinanderfolgende Fundstellen derselben Buchstabenfolge. „277 → 332 · Abstand 55“ bedeutet, dass die Folge an Position 277 und 332 beginnt. Beim Klick springt die Ansicht zur ersten Stelle. Beide Fundstellen sind grün markiert, die übrigen gelb.</p>
+        <div id="abstandwahl"></div>
+        <p>Jede Spalte zeigt einen Klartextbuchstaben, den passenden Schlüsselbuchstaben und den Geheimtextbuchstaben. Scrolle nach rechts oder springe zu einer markierten Fundstelle.</p>
+        <div id="analyse-buchstaben" class="quadrat-scroll kasiski-buchstaben" tabindex="0" role="region" aria-label="Klartext, Schlüssel und Geheimtext">
+          <div><strong>Klartext</strong><code id="analyse-klarzeile"></code></div>
+          <div><strong>Schlüssel</strong><code id="analyse-schluesselzeile"></code></div>
+          <div><strong>Geheimtext</strong><code id="analyse-geheimtext"></code></div>
+        </div>
+        <div id="fundspruenge" class="kasiski-actions kasiski-fundspruenge" hidden>
+          <button id="sprung-links" type="button">Zur ersten Fundstelle</button>
+          <button id="sprung-rechts" type="button">Zur zweiten Fundstelle</button>
+        </div>
+        <figure id="abstandsbild" class="kasiski-messung" hidden>
+          <div class="kasiski-achse">
+            <span id="messung-links"></span><span id="messung-rechts"></span>
+          </div>
+          <figcaption id="messung-rechnung" role="status"></figcaption>
+        </figure>
+        <details>
+          <summary>Alle Fundstellen mit Startpositionen anzeigen</summary>
+          <div id="folgenliste"></div>
+        </details>
+        <h3>3. Mögliche Schlüssellängen vergleichen</h3>
+        <p>Jeder unterschiedliche Abstand zählt hier einmal. Ein Balken zeigt, wie viele dieser Abstände sich durch die jeweilige Zahl teilen lassen. Wähle einen Teiler, um ihn am aktuellen Abstand auszuprobieren.</p>
+        <div id="teilerliste"></div>
+        <p id="teilerprobe" role="status"></p>
+      </div>
+    </section>
+    <section class="card" id="aufgabe">
+      <h2>Aufgabe: Finde die Schlüssellänge</h2>
+      <p>Untersuche den Geheimtext. Beginne mit Dreierfolgen und vergleiche die Teiler ihrer Abstände. Kleine Zahlen können häufig sein, weil sie auch die wirkliche Schlüssellänge teilen. Falls mehrere Längen infrage kommen, prüfe auch längere Folgen.</p>
+      <button type="button" id="neue-kasiski-aufgabe">Neue Aufgabe</button>
+      <p id="aufgabe-kasiski-status" role="status"></p>
+      <div id="aufgabe-analyse"></div>
+    </section>
+    <section class="card" id="danach">
+      <h2>Häufigkeitsanalyse und Entschlüsselung</h2>
+      <p>Übernimm deine vermutete Schlüssellänge aus der Aufgabe. Bei Länge 3 landen die Positionen 1, 4, 7, … in Gruppe 1, die Positionen 2, 5, 8, … in Gruppe 2 und die Positionen 3, 6, 9, … in Gruppe 3. Wenn die Länge stimmt, gehört zu jeder Gruppe genau ein Schlüsselbuchstabe.</p>
+      <form id="haeufigkeitsanalyse">
+        <label for="vermutete-laenge">Vermutete Schlüssellänge</label>
+        <div class="answer">
+          <input type="number" id="vermutete-laenge" min="1" step="1" required>
+          <button>Häufigkeitsanalyse</button>
+        </div>
+      </form>
+      <div id="haeufigkeits-ergebnis" hidden>
+        <h3>Häufigste Buchstaben je Gruppe</h3>
+        <ol id="haeufigkeits-gruppen"></ol>
+        <h3>Schlüsselbuchstaben im Quadrat ablesen</h3>
+        <p>Vermute zunächst, dass der häufigste Buchstabe jeder Gruppe einem <strong>E</strong> im Klartext entspricht. Suche den häufigsten Buchstaben der ersten Gruppe in der <strong>Spalte E</strong> und klicke auf ihn. Links in derselben Zeile steht dein erster vermuteter Schlüsselbuchstabe. Wiederhole das für die übrigen Gruppen und setze die Buchstaben in Gruppenreihenfolge zusammen. Bei Gleichstand probierst du die angezeigten Buchstaben aus.</p>
+        <div class="quadrat-scroll" tabindex="0" role="region" aria-label="Vigenère-Quadrat">
+          <table class="vigenere-quadrat" id="analyse-quadrat" aria-label="Vigenère-Quadrat"></table>
+        </div>
+        <form id="aufgabe-entschluesseln">
+          <h3>Schlüsselwort ausprobieren</h3>
+          <p>Prüfe am Ergebnis, ob dein Schlüsselwort einen verständlichen Text ergibt.</p>
+          <label for="vermutetes-wort">Vermutetes Schlüsselwort</label>
+          <div class="answer">
+            <input type="text" id="vermutetes-wort" pattern="[A-Za-z]+" required autocomplete="off" spellcheck="false">
+            <button>Entschlüsseln</button>
+          </div>
+        </form>
+        <label for="aufgabe-klartext">Entschlüsselter Text</label>
+        <textarea id="aufgabe-klartext" rows="7" readonly></textarea>
+      </div>
+      <p><a href="https://books.google.de/books?id=fB5dAAAAcAAJ">Friedrich W. Kasiski, Die Geheimschriften und die Dechiffrir-Kunst (1863)</a></p>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <nav class="wrap" aria-label="Rechtliches">
+      <a href="../../impressum/index.html">Impressum</a>
+      <a href="../../datenschutz/index.html">Datenschutz</a>
+    </nav>
+  </footer>
+</body>
+</html>
