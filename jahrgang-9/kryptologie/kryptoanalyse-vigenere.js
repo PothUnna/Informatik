@@ -317,7 +317,7 @@ for (const vorlage of kasiskiAufgabentexte) {
     // Ein echter Teiler der Schlüssellänge kann in der Rangliste weiter oben stehen.
     if (platz >= 0 && platz < 3 && rang[platz][1] >= 3 &&
         rang.slice(0, platz).every(([zahl]) => wort.length % zahl === 0)) {
-      aufgabenKombinationen.push({ textform, geheimtext });
+      aufgabenKombinationen.push({ textform, geheimtext, vorlage, wort });
     }
   }
 }
@@ -329,8 +329,14 @@ const gruppenliste = document.querySelector('#haeufigkeits-gruppen');
 const entschluesselungsformular = document.querySelector('#aufgabe-entschluesseln');
 const wortfeld = document.querySelector('#vermutetes-wort');
 const entschluesselterText = document.querySelector('#aufgabe-klartext');
+const textquelle = document.querySelector('#aufgabe-textquelle');
 vigenereQuadrat(document.querySelector('#analyse-quadrat'), alphabet.indexOf('E'));
 let aktuelleAufgabe;
+
+function entschluesselungZuruecksetzen() {
+  entschluesselterText.value = '';
+  textquelle.hidden = true;
+}
 
 function neueAufgabe() {
   const auswahl = aufgabenKombinationen.filter(kombination => kombination !== aktuelleAufgabe);
@@ -338,7 +344,7 @@ function neueAufgabe() {
   document.querySelector('#aufgabe-folgenlaenge').value = '3';
   haeufigkeitsformular.reset();
   entschluesselungsformular.reset();
-  entschluesselterText.value = '';
+  entschluesselungZuruecksetzen();
   haeufigkeitsergebnis.hidden = true;
   laengenfeld.max = aktuelleAufgabe.geheimtext.length;
   document.querySelector('#aufgabe-kasiski-status').textContent =
@@ -366,7 +372,7 @@ haeufigkeitsformular.addEventListener('submit', ereignis => {
     gruppenliste.append(eintrag);
   }
   entschluesselungsformular.reset();
-  entschluesselterText.value = '';
+  entschluesselungZuruecksetzen();
   haeufigkeitsergebnis.hidden = false;
 });
 laengenfeld.addEventListener('input', () => {
@@ -385,9 +391,20 @@ function aufgabentextEntschluesseln({ textform, geheimtext }, wort) {
 
 entschluesselungsformular.addEventListener('submit', ereignis => {
   ereignis.preventDefault();
-  entschluesselterText.value = aufgabentextEntschluesseln(aktuelleAufgabe, wortfeld.value.toUpperCase());
+  const wort = wortfeld.value.toUpperCase();
+  entschluesselterText.value = aufgabentextEntschluesseln(aktuelleAufgabe, wort);
+  textquelle.hidden = wort !== aktuelleAufgabe.wort;
+  if (textquelle.hidden) return;
+
+  const { titel, autor, romanLink, romanLinkText } = aktuelleAufgabe.vorlage;
+  const link = element('a', romanLinkText);
+  link.href = romanLink;
+  textquelle.replaceChildren(
+    `Der Text ist eine Nacherzählung nach „${titel}“ von ${autor}. `,
+    link
+  );
 });
-wortfeld.addEventListener('input', () => { entschluesselterText.value = ''; });
+wortfeld.addEventListener('input', entschluesselungZuruecksetzen);
 
 starten();
 neueAufgabe();
